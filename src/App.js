@@ -3,9 +3,16 @@ import {
   BrowserRouter as Router,
   Route,
   Link,
-  Redirect
+  Redirect,
+  Switch
   } from 'react-router-dom';
 import './App.css';
+import Hello from './components/Hello';
+import HelloYou from './components/HelloYou';
+import Goodbye from './components/Goodbye';
+import Contact from './components/Contact';
+import Login from './components/Login';
+import NoMatch from './components/NoMatch';
 
 class App extends Component {
   state = {
@@ -27,21 +34,24 @@ class App extends Component {
               { this.state.loggedIn ? 'Log Out' : 'Log In' }
           </button>
           <hr/>
-
-          <Route exact path="/hello" component={Hello} />
-          <Route path="/hello/:name" component={HelloYou} />
-          <Route path="/goodbye" component={Goodbye} />
-          <Route path="/contact" component={() => {
-            if (this.state.loggedIn){
-              // All good
-              return <Contact/>
-            } else {
-              // Not all good
-              return <Redirect to="/login"/>
-            }
-          }} />
-          <Route path="/login" component={Login} />
-    
+          
+          <Switch>
+            <Route exact path="/" />
+            <Route exact path="/hello" component={Hello} />
+            <Route path="/hello/:name" component={HelloYou} />
+            <Route path="/goodbye" component={Goodbye} />
+            <Route path="/contact" component={() => {
+              if (this.state.loggedIn){
+                // All good
+                return <Contact/>
+              } else {
+                // Not all good
+                return <Redirect to="/login"/>
+              }
+            }} />
+            <Route path="/login" component={Login} />
+            <Route component={NoMatch}/>
+          </Switch>
           <hr/>
 
           <Link to="/hello">Hello</Link> | 
@@ -53,25 +63,5 @@ class App extends Component {
     );
   }
 }
-
-const Hello = () => (
-  <p>Hello!</p>
-)
-
-const HelloYou = (props) => (
-  <p>Hello {props.match.params.name}!</p>
-)
-
-const Goodbye = () => (
-  <p>Goodbye!</p>
-)
-
-const Contact = () => (
-  <p>Contact!</p>
-)
-
-const Login = () => (
-  <p>Login form goes here:</p>
-)
 
 export default App;
